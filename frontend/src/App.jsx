@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
-import initialProducts from "./data/initialProducts";
 import ProductList from "./components/ProductList";
 import SearchBar from "./components/SearchBar";
+
+// TODO: Import the initial Products data
 
 function App() {
   const [products, setProducts] = useState([]);

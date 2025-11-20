@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import initialProducts from "./data/initialProducts";
 import ProductList from "./components/ProductList";
@@ -9,14 +9,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  // ============================
-  //  TODO:
-  //  Send initialProducts to backend on first load
-  //  Implement this function so backend receives the initial data
-  // ============================
   const initializeBackend = async () => {
-    // TODO: POST initialProducts to: http://localhost:5000/api/init
-    // await fetch("...", {...})
+    await fetch("http://localhost:5000/api/init", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(initialProducts),
+    });
   };
 
   const loadAllProducts = useCallback(async () => {
@@ -27,10 +27,10 @@ function App() {
 
     setIsLoading(true);
 
-    // :TODO: Replace with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const res = await fetch("http://localhost:5000/api/products");
+    const data = await res.json();
 
-    setProducts(initialProducts);
+    setProducts(data);
     setIsLoading(false);
     setInitialLoadDone(true);
   }, [initialLoadDone]);
@@ -39,15 +39,16 @@ function App() {
     async (query) => {
       if (!query.trim()) return loadAllProducts();
 
-      // TODO: Replace with actual API call
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const filtered = initialProducts.filter((product) =>
-        product.name.toLowerCase().includes(query.toLowerCase())
+      const res = await fetch(
+        `http://localhost:5000/api/products/search?query=${encodeURIComponent(
+          query
+        )}`
       );
+      const data = await res.json();
 
-      setProducts(filtered);
+      setProducts(data);
       setIsLoading(false);
     },
     [loadAllProducts]
@@ -60,18 +61,26 @@ function App() {
         return;
       }
 
-      //TODO: Replace with actual API call
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const filtered = initialProducts.filter(
-        (product) => product.category === category
+      const res = await fetch(
+        `http://localhost:5000/api/products/category/${encodeURIComponent(
+          category
+        )}`
       );
+      const data = await res.json();
 
-      setProducts(filtered);
+      setProducts(data);
       setIsLoading(false);
     },
     [loadAllProducts]
   );
+
+  useEffect(() => {
+    const start = async () => {
+      await initializeBackend();
+    };
+    start();
+  }, []);
 
   return (
     <div className="w-full h-screen p-2 bg-gray-100">

@@ -14,7 +14,10 @@ function SearchBar({ onSearch, initialLoadDone, onLoad, onSelect }) {
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            onSearch(e.target.value);
+
+            if (initialLoadDone) {
+              onSearch(e.target.value);
+            }
           }}
         />
 

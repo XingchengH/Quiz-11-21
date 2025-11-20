@@ -20,11 +20,6 @@ function App() {
   };
 
   const loadAllProducts = useCallback(async () => {
-    if (initialLoadDone) {
-      setProducts(initialProducts);
-      return;
-    }
-
     setIsLoading(true);
 
     const res = await fetch("http://localhost:5000/api/products");
@@ -33,7 +28,7 @@ function App() {
     setProducts(data);
     setIsLoading(false);
     setInitialLoadDone(true);
-  }, [initialLoadDone]);
+  }, []);
 
   const searchProducts = useCallback(
     async (query) => {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import initialProducts from "./data/initialProducts";
 import ProductList from "./components/ProductList";
@@ -15,40 +15,25 @@ function App() {
   //  Implement this function so backend receives the initial data
   // ============================
   const initializeBackend = async () => {
+    setIsLoading(true);
     // TODO: POST initialProducts to: http://localhost:5000/api/init
-    // await fetch("...", {...})
+    // await fetch("...", {...}), after that setIsloading to false
+
+    // setIsLoading(false);
   };
 
   const loadAllProducts = useCallback(async () => {
-    if (initialLoadDone) {
-      setProducts(initialProducts);
-      return;
-    }
-
     setIsLoading(true);
 
-    // :TODO: Replace with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    setProducts(initialProducts);
-    setIsLoading(false);
-    setInitialLoadDone(true);
-  }, [initialLoadDone]);
+    // :TODO: Getting all products from backend, setProducts with the result, after that setIsLoading to false, and setInitialLoadDone to true
+  }, []);
 
   const searchProducts = useCallback(
     async (query) => {
       if (!query.trim()) return loadAllProducts();
-
-      // TODO: Replace with actual API call
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const filtered = initialProducts.filter((product) =>
-        product.name.toLowerCase().includes(query.toLowerCase())
-      );
-
-      setProducts(filtered);
-      setIsLoading(false);
+      // TODO: Getting the search results from backend, setProducts with the result, then setIsLoading to false
     },
     [loadAllProducts]
   );
@@ -59,19 +44,19 @@ function App() {
         loadAllProducts();
         return;
       }
-
-      //TODO: Replace with actual API call
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const filtered = initialProducts.filter(
-        (product) => product.category === category
-      );
 
-      setProducts(filtered);
-      setIsLoading(false);
+      //TODO: Getting the category filter results from backend, setProducts with the result, then setIsLoading to false
     },
     [loadAllProducts]
   );
+
+  useEffect(() => {
+    const start = async () => {
+      await initializeBackend();
+    };
+    start();
+  }, []);
 
   return (
     <div className="w-full h-screen p-2 bg-gray-100">

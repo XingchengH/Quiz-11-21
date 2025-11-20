@@ -34,7 +34,7 @@ function App() {
       if (!query.trim()) return loadAllProducts();
       setIsLoading(true);
 
-      // TODO: Getting the search results from backend, setProducts with the result, then setIsLoading to false
+      // TODO: Getting the search results from backend, setProducts with the result, then setIsLoading to false. Hint: use encodeURIComponent for the query param
     },
     [loadAllProducts]
   );
@@ -47,7 +47,7 @@ function App() {
       }
       setIsLoading(true);
 
-      //TODO: Getting the category filter results from backend, setProducts with the result, then setIsLoading to false
+      //TODO: Getting the category filter results from backend, setProducts with the result, then setIsLoading to false. Hint: use encodeURIComponent for the category param
     },
     [loadAllProducts]
   );

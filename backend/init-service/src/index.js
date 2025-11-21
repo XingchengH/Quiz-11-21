@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Receive initial data
+// Receive data from frontend through gateway
 app.post("/init", (req, res) => {
   if (!Array.isArray(req.body)) {
     return res.status(400).json({ message: "Invalid data" });
@@ -19,8 +19,8 @@ app.post("/init", (req, res) => {
   res.json({ message: "OK" });
 });
 
-// Product Service fetches here
-app.get("/api/products", (req, res) => {
+// Product Service reads here (NO /api)
+app.get("/products", (req, res) => {
   res.json(products);
 });
 

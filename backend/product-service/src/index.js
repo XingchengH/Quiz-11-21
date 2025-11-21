@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Helper: get current products
 async function fetchProducts() {
-  const res = await fetch("http://localhost:4101/api/products");
+  const res = await fetch("http://localhost:4101/products");
   return res.json();
 }
 

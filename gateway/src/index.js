@@ -6,39 +6,29 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// =====================
-// INIT SERVICE (POST)
-// =====================
+// INIT SERVICE
 app.use(
   "/api/init",
   createProxyMiddleware({
     target: "http://localhost:4101",
     changeOrigin: true,
-    pathRewrite: {
-      "^/api/init": "/init",
-    },
+    pathRewrite: { "^/api/init": "/init" },
     onProxyReq: (proxyReq, req) => {
-      if (req.body) {
-        const bodyData = JSON.stringify(req.body);
-        proxyReq.setHeader("Content-Type", "application/json");
-        proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
-        proxyReq.write(bodyData);
-      }
+      const body = JSON.stringify(req.body);      
+      proxyReq.setHeader("Content-Type", "application/json");
+      proxyReq.setHeader("Content-Length", Buffer.byteLength(body));
+      proxyReq.write(body);
     },
   })
 );
 
-// =====================
-// PRODUCT SERVICE
-// =====================
+// PRODUCT SERVICE (no need pathRewrite per-route)
 app.use(
-  "/api/products",
+  "/api",
   createProxyMiddleware({
     target: "http://localhost:4002",
     changeOrigin: true,
-    pathRewrite: {
-      "^/api/products": "/products",
-    },
+    pathRewrite: { "^/api": "" },
   })
 );
 
